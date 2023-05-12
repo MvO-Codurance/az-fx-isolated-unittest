@@ -12,7 +12,7 @@ public static class MockHelpers
         string method = "GET")
     {
         var input = payload ?? string.Empty;
-        var functionContext = CreateContext(new NewtonsoftJsonObjectSerializer());
+        var functionContext = CreateContext(new JsonObjectSerializer());
         var request = new MockHttpRequestData(functionContext, method: method,
             body: new MemoryStream(Encoding.UTF8.GetBytes(input)));
         request.Headers.Add("Content-Type", "application/json");
