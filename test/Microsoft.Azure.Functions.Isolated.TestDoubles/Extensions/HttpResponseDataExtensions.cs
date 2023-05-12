@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Functions.Worker.Http;
+﻿using System.Text.Json;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Microsoft.Azure.Functions.Isolated.TestDoubles.Extensions
 {
@@ -20,6 +21,22 @@ namespace Microsoft.Azure.Functions.Isolated.TestDoubles.Extensions
                 }
             }
             return string.Empty;
+        }
+        
+        public static T? ReadHttpResponseDataAsJson<T>(this HttpResponseData response)
+        {
+            var stream = response.Body;
+            if (stream is MemoryStream)
+            {
+                if (stream.Position != 0)
+                {
+                    stream.Position = 0;
+                }
+
+                return JsonSerializer.Deserialize<T>(stream);
+            }
+
+            return default;
         }
     }
 }
